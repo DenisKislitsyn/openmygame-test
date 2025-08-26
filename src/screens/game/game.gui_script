@@ -250,6 +250,14 @@ end
 
 function on_input(self, action_id, action)
 	if action_id == TOUCH then
+		if action.pressed then
+			if #self.input_queue_word.cells > 0 then
+				m_word.clear_cells(self.input_queue_word)
+				gui.cancel_animation(self.input_queue_word.root, POSITION_X)
+				gui.set(self.input_queue_word.root, POSITION_X, 0)
+			end
+		end
+		
 		for i, letter in ipairs(self.input_letters_nodes) do
 			if letter:on_input(action) then
 				if not letter.picked then
