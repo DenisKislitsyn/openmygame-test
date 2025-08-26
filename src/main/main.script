@@ -20,6 +20,33 @@ local function resize_bg()
 	go.set('main:/go#background', 'size', vmath.vector3(w + 10, h + 10, 0))
 end
 
+local function save_cookie(key, value)
+	local js = string.format([[
+	document.cookie = "%s=%s; path=/; max-age=31536000"; 
+	]], key, value)
+	html5.run(js)
+end
+
+local function get_cookie(key)
+	if html5 then
+		local js = string.format([[
+		(function() {
+			let name = "%s=";
+			let ca = document.cookie.split(';');
+			for(let i=0;i<ca.length;i++) {
+				let c = ca[i].trim();
+				if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+			}
+			return "";
+		})();
+		]], key)
+
+		local value = html5.run(js)
+
+		return value
+	end
+end
+
 local function resize(self, event, data)
 	if event == window.WINDOW_EVENT_RESIZED then
 		self.t = self.t or timer.delay(0.06, false, function()
@@ -31,10 +58,11 @@ local function resize(self, event, data)
 			monarch.post(monarch.scr.game, 'on_resize')
 		end
 	elseif event == window.WINDOW_EVENT_FOCUS_GAINED then
-		save_data.reload()
-		pprint(self.launch_time, save_data.load(LAUNCH_TIME_KEY))
-		if self.launch_time ~= save_data.load(LAUNCH_TIME_KEY) then
-			pprint('a')
+		if html5 then
+			local last_launch = get_cookie(LAUNCH_TIME_KEY)
+			if self.launch_time ~= tonumber(last_launch) then
+				monarch.show(monarch.scr.reload_game_screen)
+			end
 		end
 	end
 end
@@ -61,7 +89,10 @@ end
 function on_message(self, message_id, message, sender)
 	if message_id == hash('init_msg') then
 		monarch.show(monarch.scr.game)
+
 		self.launch_time = os.time()
-		save_data.save(LAUNCH_TIME_KEY, self.launch_time)
+		if html5 then
+			save_cookie(LAUNCH_TIME_KEY, self.launch_time)
+		end
 	end
 end

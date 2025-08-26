@@ -24,10 +24,11 @@ function M.get_words_by_level(level)
 	local level_file = sys.load_resource(string.format(levels_path, tostring(level)))
 	local words_list = json.decode(level_file).words
 	local data = {}
-	for _, word in ipairs(words_list) do
+	for i, word in ipairs(words_list) do
 		table.insert(data, {
 			str = word,
-			list = get_word_chars(word) 
+			list = get_word_chars(word),
+			index = i
 		})
 	end
 	

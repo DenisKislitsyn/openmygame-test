@@ -25,7 +25,7 @@ wasm_streaming = 1
 
 [project]
 title = openmygame_test
-version = 0.0.2
+version = 0.0.3
 publisher = DKislicyn
 developer = DKislicyn
 custom_resources = res/

@@ -10,7 +10,10 @@ function init(self)
 	self.buttons = {}
 	self.buttons.reload = button.new(self, 'reload_button', function ()
 		if html5 then
-			pprint('reload')
+			local js = [[
+				window.location.reload();
+			]]
+			html5.run(js)
 		end
 	end)
 

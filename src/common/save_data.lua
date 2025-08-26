@@ -6,7 +6,10 @@ local M = {}
 
 local def_save = {
 	level = 1,
-	launch_time = 0
+	launch_time = 0,
+	level_data = {
+		founded_words = {}
+	}
 }
 
 function M.save(key, value)
@@ -25,11 +28,6 @@ function M.initialize()
 		save_data = def_save
 		M.save()
 	end
-end
-
-function M.reload()
-	save_data = savetable.load(save_file)
-	pprint(savetable.load(save_file))
 end
 
 return M

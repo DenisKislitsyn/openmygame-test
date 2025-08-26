@@ -13,6 +13,7 @@ local POSITION_X = 'position.x'
 local POSITION_Y = 'position.y'
 local POSITION = 'position'
 local LEVEL_KEY = 'level'
+local LEVEL_DATA_KEY = 'level_data'
 local TOUCH = hash('touch')
 
 local MAX_LEVEL = 3
@@ -25,7 +26,7 @@ local MAX_COLUMNS = 3
 local cell_dy = 10
 local words_dx = 30
 local vector_0 = vmath.vector3()
-local function set_words(self)
+local function set_words_grid(self)
 	local cell_size_y = m_cell.dimensions.scale_y * m_cell.dimensions.size_y
 
 	local words_count = #self.words
@@ -85,11 +86,20 @@ local function set_words(self)
 end
 
 local function create_words(self)
+	local level_data = save_data.load(LEVEL_DATA_KEY)
+	local founded_words = level_data and level_data.founded_words or {}
 	for i, word_data in ipairs(self.words) do
 		word_data.obj = m_word.new(word_data.list, self.word_root_node, self.cell_prefab)
 		gui.set_parent(word_data.obj.root, self.words_root_node)
+
+		for _, index in ipairs(founded_words) do
+			if word_data.index == index then
+				word_data.found = true
+				m_word.set_cells_state(word_data.obj, m_cell.states.CORRECT)
+			end
+		end
 	end
-	set_words(self)
+	set_words_grid(self)
 end
 
 local function create_input_letters(self)
@@ -111,6 +121,25 @@ local function create_input_letters(self)
 	end
 end
 
+local function save_level_data(self, set_empty)
+	local data = {
+		founded_words = {}
+	}
+
+	if set_empty then
+		save_data.save(LEVEL_DATA_KEY, data)
+		return
+	end
+
+	for _, word_data in ipairs(self.words) do
+		if word_data.found then
+			table.insert(data.founded_words, word_data.index)
+		end
+	end
+
+	save_data.save(LEVEL_DATA_KEY, data)
+end
+
 local function check_win(self)
 	local win = true
 	for _, word_data in ipairs(self.words) do
@@ -121,6 +150,7 @@ local function check_win(self)
 	end
 
 	if win then
+		save_level_data(self, true)
 		save_data.save(LEVEL_KEY, save_data.load(LEVEL_KEY) + 1)
 		monarch.show(monarch.scr.win_screen)
 	end
@@ -136,6 +166,7 @@ local function check_word(self)
 		if word_data.str == str and not word_data.found then
 			word_data.found = true
 			m_word.set_cells_state(word_data.obj, m_cell.states.CORRECT)
+			save_level_data(self)
 			break
 		end
 	end
