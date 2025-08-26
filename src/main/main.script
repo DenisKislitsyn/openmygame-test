@@ -1,0 +1,65 @@
+local screens = require 'screens.screens'
+local monarch = require 'monarch.monarch'
+local camera = require 'orthographic.camera'
+local save_data = require 'common.save_data'
+require 'common.utils'
+
+local LAUNCH_TIME_KEY = 'launch_time'
+
+local function jstodef_listener(self, message_id, message)
+	if message_id == "MessageID" then
+		pprint(message)
+	end
+end
+
+local function resize_bg()
+	local b = camera.screen_to_world_bounds()
+	local w = b.z - b.x
+	local h = b.y - b.w
+	go.set('main:/go#background', 'size', vmath.vector3(w + 10, h + 10, 0))
+end
+
+local function resize(self, event, data)
+	if event == window.WINDOW_EVENT_RESIZED then
+		self.t = self.t or timer.delay(0.06, false, function()
+			resize_bg()
+			self.t = nil
+		end)
+
+		if monarch.is_top(monarch.scr.game) then
+			monarch.post(monarch.scr.game, 'on_resize')
+		end
+	elseif event == window.WINDOW_EVENT_FOCUS_GAINED then
+		save_data.reload()
+		pprint(self.launch_time, save_data.load(LAUNCH_TIME_KEY))
+		if self.launch_time ~= save_data.load(LAUNCH_TIME_KEY) then
+			pprint('a')
+		end
+	end
+end
+
+function init(self)
+	math.randomseed(100000 * (socket.gettime() % 1))
+	
+	-- jstodef
+	if jstodef then
+		jstodef.add_listener(jstodef_listener)
+	end
+
+	save_data.initialize()
+	monarch.scr = screens
+	window.set_listener(resize)
+	timer.delay(0.1, false, function()
+		resize_bg()
+	end)
+	
+	msg.post('.', 'init_msg')
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('init_msg') then
+		monarch.show(monarch.scr.game)
+		self.launch_time = os.time()
+		save_data.save(LAUNCH_TIME_KEY, self.launch_time)
+	end
+end

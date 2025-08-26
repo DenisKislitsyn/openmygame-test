@@ -1,0 +1,11 @@
+.externalToolBuilders
+.DS_Store
+Thumbs.db
+.lock-wscript
+*.pyc
+.project
+.cproject
+src/builtins
+src/.editor_settings
+src/.internal
+src/build

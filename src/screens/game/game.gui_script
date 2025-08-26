@@ -1,0 +1,243 @@
+local game_utils = require 'screens.game.modules.game_utils'
+local save_data = require 'common.save_data'
+local m_input_letter = require 'screens.game.modules.input_letter'
+local m_cell = require 'screens.game.modules.cell'
+local m_word = require 'screens.game.modules.word'
+local m_line = require 'screens.game.modules.line'
+
+local monarch = require 'monarch.monarch'
+
+local POSITION_X = 'position.x'
+local POSITION_Y = 'position.y'
+local POSITION = 'position'
+local LEVEL_KEY = 'level'
+local TOUCH = hash('touch')
+
+local MAX_LEVEL = 3
+local CELL_SIZE = 72
+local BASE_SCALE = 1.1
+local CIRCLE_RADIUS = 152.5
+local MAX_ROWS = 8
+local MAX_COLUMNS = 3 
+
+local cell_dy = 10
+local words_dx = 30
+local vector_0 = vmath.vector3()
+local function set_words(self)
+	local cell_size_y = m_cell.dimensions.scale_y * m_cell.dimensions.size_y
+
+	local words_count = #self.words
+	local columns, rows = 1, words_count
+	if words_count > 4 then
+		rows = math.min(math.ceil(words_count / 2), MAX_ROWS)
+		columns = math.min(math.ceil(words_count / rows), MAX_COLUMNS)
+	end
+
+	local grid_size_y = rows*cell_size_y + (rows-1*cell_dy)
+	if columns > 1 then
+		local last_in_column_word_index = rows
+		local grid_size_x = 0
+		local grid_scale_x, grid_scale_y = 1, 1
+
+		-- get words scale X
+		for i=1, columns do
+			grid_size_x = grid_size_x + self.words[last_in_column_word_index].obj.x
+			last_in_column_word_index = math.min(last_in_column_word_index + rows, words_count)
+		end
+		grid_size_x = grid_size_x + (columns - 1) * words_dx
+		grid_scale_x = math.min(self.words_root_node_size.x / grid_size_x, grid_scale_x)
+
+		-- get words scale Y
+		grid_scale_y = math.min(self.words_root_node_size.y / grid_size_y, grid_scale_y)
+
+		local word_scale = math.min(grid_scale_x, grid_scale_y)
+		local pos = vector_0
+		local scale_vector = vmath.vector3(word_scale)
+		
+		pos.x = -math.min(self.words_root_node_size.x/2, grid_size_x/2)
+		local start_pos_y = math.min(self.words_root_node_size.y/2, grid_size_y/2) - cell_size_y*word_scale/2
+		pos.y = start_pos_y
+
+		for i, word_data in ipairs(self.words) do
+			gui.set_scale(word_data.obj.root, scale_vector)
+			gui.set(word_data.obj.root, POSITION_Y, pos.y)
+			pos.y = pos.y - ((cell_size_y+cell_dy)*word_scale)
+
+			gui.set(word_data.obj.root, POSITION_X, pos.x + word_data.obj.x*word_scale/2)
+			
+			if i % rows == 0 then
+				pos.y = start_pos_y
+				pos.x = pos.x + (word_data.obj.x+words_dx)*word_scale
+			end
+		end
+	else
+		local height = #self.words * cell_size_y + (#self.words - 1) * cell_dy
+		local pos_y = height/2 - cell_size_y/2
+
+		for i, word_data in ipairs(self.words) do
+			gui.set(word_data.obj.root, POSITION_Y, pos_y)
+			pos_y = pos_y - (CELL_SIZE * BASE_SCALE) - cell_dy
+		end
+	end
+
+end
+
+local function create_words(self)
+	for i, word_data in ipairs(self.words) do
+		word_data.obj = m_word.new(word_data.list, self.word_root_node, self.cell_prefab)
+		gui.set_parent(word_data.obj.root, self.words_root_node)
+	end
+	set_words(self)
+end
+
+local function create_input_letters(self)
+	self.input_letters_nodes = {}
+	local pos =  vmath.vector3()
+	
+	for i, char in ipairs(self.letters) do
+		local letter = m_input_letter.new(self, self.input_letter_prefab, char)
+		
+		local delta = math.rad(90)
+		local theta = 2 * math.pi * i / #self.letters + delta
+		pos.x = CIRCLE_RADIUS * math.cos(theta)
+		pos.y = CIRCLE_RADIUS * math.sin(theta)
+		
+		gui.set_parent(letter.nodes.root, self.input_letters_root_node)
+		gui.set_position(letter.nodes.root, pos)
+
+		table.insert(self.input_letters_nodes, letter)
+	end
+end
+
+local function check_win(self)
+	local win = true
+	for _, word_data in ipairs(self.words) do
+		if not word_data.found then
+			win = false
+			break
+		end
+	end
+
+	if win then
+		save_data.save(LEVEL_KEY, save_data.load(LEVEL_KEY) + 1)
+		monarch.show(monarch.scr.win_screen)
+	end
+end
+
+local function check_word(self)
+	local str = ""
+	for _, c in ipairs(self.input_queue_word.cells) do
+		str = str .. c.char
+	end
+
+	for _, word_data in ipairs(self.words) do
+		if word_data.str == str and not word_data.found then
+			word_data.found = true
+			m_word.set_cells_state(word_data.obj, m_cell.states.CORRECT)
+			break
+		end
+	end
+	
+	m_word.clear_cells(self.input_queue_word)
+
+	check_win(self)
+end
+
+function init(self)
+	gui.set_render_order(2)
+
+	self.input_letter_prefab = gui.get_node('input_letter')
+	self.input_letters_root_node = gui.get_node('input_letters_root')
+	
+	self.cell_prefab = gui.get_node('cell')
+	self.word_root_node = gui.get_node('word_root')
+	self.words_root_node = gui.get_node('words_root')
+	self.words_root_node_size = gui.get_size(self.words_root_node)
+	
+	self.input_queue_root_node = gui.get_node('input_queue_root')
+
+	self.input_queue_word = m_word.new({}, self.word_root_node, self.cell_prefab)
+	self.input_queue_letters = {}
+	gui.set_parent(self.input_queue_word.root, self.input_queue_root_node)
+	
+	msg.post('.', 'init_msg')
+
+	monarch.on_post(monarch.scr.game)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash('init_msg') then
+		-- get current level
+		local save_level = save_data.load(LEVEL_KEY) or 1
+		gui.set_text(gui.get_node('level_text'), 'Уровень ' .. save_level)
+		local level_to_load = save_level % MAX_LEVEL
+		if level_to_load == 0 then
+			level_to_load = MAX_LEVEL
+		end
+
+		-- get level words
+		self.words = game_utils.get_words_by_level(level_to_load)
+		table.sort(self.words, function (a,b)
+			return #a.list < #b.list
+		end)
+
+		-- get chars
+		self.letters = game_utils.get_unique_chars(self.words)
+		table.shuffle(self.letters)
+
+		-- draw words & input letters
+		create_input_letters(self)
+		create_words(self)
+
+		self.line = m_line.new(self, gui.get_node('line_dot'))
+
+		msg.post('.', 'acquire_input_focus')
+	elseif message_id == hash('on_resize') then
+		self.line:on_resize()
+	end
+end
+
+local function set_second_last_letter(self)
+	for i, letter in ipairs(self.input_queue_letters) do
+		letter.second_last = i == #self.input_queue_letters - 1
+	end
+end
+
+function on_input(self, action_id, action)
+	if action_id == TOUCH then
+		for i, letter in ipairs(self.input_letters_nodes) do
+			if letter:on_input(action) then
+				if not letter.picked then
+					letter.picked = true
+					letter:set_state()
+					m_word.add_cell(self.input_queue_word, letter.char, self.cell_prefab)
+					m_word.set_cells_state(self.input_queue_word, m_cell.states.BASE)
+
+					table.insert(self.input_queue_letters, letter)
+					set_second_last_letter(self)
+
+					self.line:add(gui.get_position(letter.nodes.root))
+				elseif letter.picked and letter.second_last then
+					self.input_queue_letters[#self.input_queue_letters].picked = false
+					self.input_queue_letters[#self.input_queue_letters]:set_state()
+					m_word.remove_cell(self.input_queue_word)
+					
+					table.remove(self.input_queue_letters, #self.input_queue_letters)
+					set_second_last_letter(self)
+
+					self.line:remove_last()
+				end
+			end
+		end
+
+		if #self.line.segments > 0 then
+			self.line:on_input(action)
+		end
+
+		if action.released then
+			if #self.input_queue_word.cells > 0 then
+				check_word(self)
+			end
+		end
+	end
+end

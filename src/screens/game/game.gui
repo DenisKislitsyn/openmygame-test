@@ -1,0 +1,230 @@
+script: "/screens/game/game.gui_script"
+fonts {
+  name: "default"
+  font: "/assets/fonts/font.font"
+}
+textures {
+  name: "main"
+  texture: "/assets/atlases/main.atlas"
+}
+nodes {
+  position {
+    x: 360.0
+    y: 640.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "root"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 590.0
+  }
+  scale {
+    x: 0.55
+    y: 0.55
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\243\321\200\320\276\320\262\320\265\320\275\321\214 1"
+  font: "default"
+  id: "level_text"
+  parent: "root"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -290.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "input_letters_root"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 330.0
+    y: 330.0
+  }
+  type: TYPE_BOX
+  texture: "main/letters_circle"
+  id: "bg_circle"
+  parent: "input_letters_root"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: -10.0
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "input_queue_root"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 260.0
+  }
+  size {
+    x: 670.0
+    y: 530.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "words_root"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "prefabs"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  enabled: false
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "input_letter"
+  parent: "prefabs"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  scale {
+    x: 1.1
+    y: 1.1
+  }
+  type: TYPE_BOX
+  texture: "main/letter_unpicked"
+  id: "input_letter_bg"
+  parent: "input_letter"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 10.0
+  }
+  size {
+    x: 50.0
+    y: 60.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222"
+  font: "default"
+  id: "input_letter_text"
+  parent: "input_letter"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  scale {
+    x: 1.1
+    y: 1.1
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "cell"
+  parent: "prefabs"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 72.0
+    y: 72.0
+  }
+  type: TYPE_BOX
+  texture: "main/cell"
+  id: "cell_bg"
+  parent: "cell"
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 10.0
+  }
+  size {
+    x: 50.0
+    y: 60.0
+  }
+  type: TYPE_TEXT
+  text: "\320\222"
+  font: "default"
+  id: "cell_text"
+  parent: "cell"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "word_root"
+  parent: "prefabs"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 32.0
+    y: 32.0
+  }
+  type: TYPE_BOX
+  texture: "main/line_part"
+  id: "line_dot"
+  parent: "prefabs"
+  layer: "upper_node"
+  inherit_alpha: true
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "line"
+  layer: "upper_node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+layers {
+  name: "node"
+}
+layers {
+  name: "text"
+}
+layers {
+  name: "upper_node"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+max_nodes: 4096

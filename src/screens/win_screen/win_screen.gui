@@ -1,0 +1,116 @@
+script: "/screens/win_screen/win_screen.gui_script"
+fonts {
+  name: "default"
+  font: "/assets/fonts/font.font"
+}
+textures {
+  name: "main"
+  texture: "/assets/atlases/main.atlas"
+}
+nodes {
+  position {
+    x: 360.0
+    y: 640.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "root"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 280.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\230\320\267\321\203\320\274\320\270\321\202\320\265\320\273\321\214\320\275\320\276!"
+  font: "default"
+  id: "congrats_text"
+  parent: "root"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: 335.0
+  }
+  scale {
+    x: 0.6
+    y: 0.6
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\243\321\200\320\276\320\262\320\265\320\275\321\214 1 \320\277\321\200\320\276\320\271\320\264\320\265\320\275\n"
+  ""
+  font: "default"
+  id: "level_text"
+  parent: "root"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+nodes {
+  position {
+    y: -190.0
+  }
+  size {
+    x: 330.0
+    y: 95.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "next_level_button"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/button"
+  id: "next_level_button_bg"
+  parent: "next_level_button"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 8.0
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\243\321\200\320\276\320\262\320\265\320\275\321\214 2"
+  font: "default"
+  id: "next_level_button_text"
+  parent: "next_level_button"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+layers {
+  name: "node"
+}
+layers {
+  name: "text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+max_nodes: 12

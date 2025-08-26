@@ -1,0 +1,10 @@
+name: "win_screen"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"monarch\"\n"
+  "  component: \"/screens/win_screen/win_screen.gui\"\n"
+  "}\n"
+  ""
+}

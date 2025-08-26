@@ -1,0 +1,34 @@
+images {
+  image: "/assets/images/button.png"
+}
+images {
+  image: "/assets/images/cell.png"
+}
+images {
+  image: "/assets/images/letter_picked.png"
+}
+images {
+  image: "/assets/images/letter_unpicked.png"
+}
+images {
+  image: "/assets/images/letters_circle.png"
+}
+images {
+  image: "/assets/images/popup_ribbon.png"
+}
+images {
+  image: "/assets/images/empty.png"
+}
+images {
+  image: "/assets/images/popup_bg.png"
+}
+images {
+  image: "/assets/images/bg_tile.png"
+}
+images {
+  image: "/assets/images/line.png"
+}
+images {
+  image: "/assets/images/line_part.png"
+}
+extrude_borders: 2

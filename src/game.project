@@ -1,0 +1,86 @@
+[bootstrap]
+main_collection = /main/main.collectionc
+render = /orthographic/render/orthographic.renderc
+
+[script]
+shared_state = 1
+
+[display]
+width = 720
+height = 1280
+high_dpi = 1
+samples = 1
+
+[android]
+input_method = HiddenInputField
+
+[html5]
+scale_mode = stretch
+heap_size = 32
+cssfile = /builtins/manifests/web/dark_theme.css
+show_fullscreen_button = 0
+show_console_banner = 0
+show_made_with_defold = 0
+wasm_streaming = 1
+
+[project]
+title = openmygame_test
+version = 0.0.1
+publisher = DKislicyn
+developer = DKislicyn
+custom_resources = res/
+dependencies#0 = https://github.com/britzl/monarch/archive/refs/tags/5.1.1.zip
+dependencies#1 = https://github.com/britzl/defold-orthographic/archive/refs/tags/3.4.0.zip
+dependencies#2 = https://github.com/AGulev/jstodef/archive/refs/tags/3.0.0.zip
+dependencies#3 = https://github.com/britzl/ludobits/archive/refs/tags/7.5.0.zip
+
+[collection]
+max_instances = 256
+
+[collectionfactory]
+max_count = 0
+
+[collection_proxy]
+max_count = 3
+
+[factory]
+max_count = 16
+
+[gui]
+max_count = 8
+
+[label]
+max_count = 0
+
+[mesh]
+max_count = 0
+
+[model]
+max_count = 0
+
+[particle_fx]
+max_count = 16
+max_emitter_count = 16
+max_particle_count = 128
+max_particle_buffer_count = 128
+
+[tilemap]
+max_count = 0
+max_tile_count = 0
+
+[graphics]
+max_draw_calls = 256
+texture_profiles = /game.texture_profiles
+
+[input]
+use_accelerometer = 0
+
+[network]
+http_thread_count = 2
+
+[resource]
+max_resources = 512
+
+[native_extension]
+app_manifest = /game.appmanifest
+
