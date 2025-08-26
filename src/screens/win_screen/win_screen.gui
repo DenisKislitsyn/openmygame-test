@@ -80,6 +80,7 @@ nodes {
   texture: "main/button"
   id: "next_level_button_bg"
   parent: "next_level_button"
+  layer: "node"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO
 }
@@ -113,4 +114,4 @@ layers {
 }
 material: "/builtins/materials/gui.material"
 adjust_reference: ADJUST_REFERENCE_PARENT
-max_nodes: 12
+max_nodes: 6

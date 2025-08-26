@@ -1,5 +1,7 @@
 local game_utils = require 'screens.game.modules.game_utils'
 local save_data = require 'common.save_data'
+local texts = require 'common.texts'
+
 local m_input_letter = require 'screens.game.modules.input_letter'
 local m_cell = require 'screens.game.modules.cell'
 local m_word = require 'screens.game.modules.word'
@@ -169,7 +171,7 @@ function on_message(self, message_id, message, sender)
 	if message_id == hash('init_msg') then
 		-- get current level
 		local save_level = save_data.load(LEVEL_KEY) or 1
-		gui.set_text(gui.get_node('level_text'), 'Уровень ' .. save_level)
+		gui.set_text(gui.get_node('level_text'), string.format(texts.get_text().level, save_level))
 		local level_to_load = save_level % MAX_LEVEL
 		if level_to_load == 0 then
 			level_to_load = MAX_LEVEL
@@ -188,7 +190,7 @@ function on_message(self, message_id, message, sender)
 		-- draw words & input letters
 		create_input_letters(self)
 		create_words(self)
-
+		
 		self.line = m_line.new(self, gui.get_node('line_dot'))
 
 		msg.post('.', 'acquire_input_focus')
@@ -216,7 +218,7 @@ function on_input(self, action_id, action)
 					table.insert(self.input_queue_letters, letter)
 					set_second_last_letter(self)
 
-					self.line:add(gui.get_position(letter.nodes.root))
+					self.line:add(letter.nodes.root)
 				elseif letter.picked and letter.second_last then
 					self.input_queue_letters[#self.input_queue_letters].picked = false
 					self.input_queue_letters[#self.input_queue_letters]:set_state()

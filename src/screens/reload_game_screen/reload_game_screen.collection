@@ -1,0 +1,10 @@
+name: "reload_game_screen"
+scale_along_z: 0
+embedded_instances {
+  id: "go"
+  data: "components {\n"
+  "  id: \"monarch\"\n"
+  "  component: \"/screens/reload_game_screen/reload_game_screen.gui\"\n"
+  "}\n"
+  ""
+}

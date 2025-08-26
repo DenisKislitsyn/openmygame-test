@@ -1,0 +1,185 @@
+script: "/screens/reload_game_screen/reload_game_screen.gui_script"
+fonts {
+  name: "default"
+  font: "/assets/fonts/font.font"
+}
+textures {
+  name: "main"
+  texture: "/assets/atlases/main.atlas"
+}
+nodes {
+  position {
+    x: 360.0
+    y: 640.0
+  }
+  size {
+    x: 720.0
+    y: 1280.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "root"
+  adjust_mode: ADJUST_MODE_STRETCH
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 720.0
+    y: 1280.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_BOX
+  id: "bg"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+  alpha: 0.5
+}
+nodes {
+  position {
+    y: -10.0
+  }
+  scale {
+    x: 1.1
+    y: 1.1
+  }
+  size {
+    x: 530.0
+    y: 428.0
+  }
+  type: TYPE_BOX
+  texture: "main/popup_bg"
+  id: "popup_bg"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    y: 184.0
+  }
+  scale {
+    x: 1.1
+    y: 1.1
+  }
+  type: TYPE_BOX
+  texture: "main/popup_ribbon"
+  id: "popup_title"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 17.0
+  }
+  scale {
+    x: 0.65
+    y: 0.65
+  }
+  size {
+    x: 500.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\224\320\262\320\265 \320\262\320\272\320\273\320\260\320\264\320\272\320\270 \321\201 \320\270\320\263\321\200\320\276\320\271?"
+  font: "default"
+  id: "title"
+  line_break: true
+  parent: "popup_title"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  text_leading: 0.5
+}
+nodes {
+  position {
+    y: 17.0
+  }
+  scale {
+    x: 0.55
+    y: 0.55
+  }
+  size {
+    x: 950.0
+    y: 100.0
+  }
+  color {
+    x: 0.302
+    y: 0.302
+    z: 0.302
+  }
+  type: TYPE_TEXT
+  text: "\320\237\320\276\321\205\320\276\320\266\320\265, \320\270\320\263\321\200\320\260 \320\276\321\202\320\272\321\200\321\213\321\202\320\260 \320\262 \320\275\320\265\321\201\320\272\320\276\320\273\321\214\320\272\320\270\321\205 \320\262\320\272\320\273\320\260\320\264\320\272\320\260\321\205 \320\261\321\200\320\260\321\203\320\267\320\265\321\200\320\260. \320\247\321\202\320\276\320\261\321\213 \320\277\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\321\214 \320\270\320\263\321\200\320\260\321\202\321\214 \320\262 \321\215\321\202\320\276\320\271 \320\262\320\272\320\273\320\260\320\264\320\272\320\265, \320\276\320\261\320\275\320\276\320\262\320\270\321\202\320\265 \321\201\321\202\321\200\320\260\320\275\320\270\321\206\321\203."
+  font: "default"
+  id: "description"
+  line_break: true
+  parent: "root"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+  text_leading: 0.55
+}
+nodes {
+  position {
+    y: -170.0
+  }
+  size {
+    x: 330.0
+    y: 95.0
+  }
+  type: TYPE_BOX
+  texture: "main/empty"
+  id: "reload_button"
+  parent: "root"
+  layer: "node"
+  inherit_alpha: true
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/button"
+  id: "reload_button_bg"
+  parent: "reload_button"
+  layer: "node"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: 8.0
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_TEXT
+  text: "\320\243\321\200\320\276\320\262\320\265\320\275\321\214 2"
+  font: "default"
+  id: "reload_button_text"
+  parent: "reload_button"
+  layer: "text"
+  inherit_alpha: true
+  outline_alpha: 0.0
+  shadow_alpha: 0.0
+}
+layers {
+  name: "node"
+}
+layers {
+  name: "text"
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT
+max_nodes: 9

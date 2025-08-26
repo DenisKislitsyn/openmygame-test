@@ -62,6 +62,7 @@ nodes {
   texture: "main/letters_circle"
   id: "bg_circle"
   parent: "input_letters_root"
+  layer: "node"
   inherit_alpha: true
 }
 nodes {
@@ -212,6 +213,8 @@ nodes {
   type: TYPE_BOX
   texture: "main/empty"
   id: "line"
+  xanchor: XANCHOR_LEFT
+  yanchor: YANCHOR_BOTTOM
   layer: "upper_node"
   inherit_alpha: true
   size_mode: SIZE_MODE_AUTO

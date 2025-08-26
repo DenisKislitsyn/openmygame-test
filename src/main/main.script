@@ -2,6 +2,7 @@ local screens = require 'screens.screens'
 local monarch = require 'monarch.monarch'
 local camera = require 'orthographic.camera'
 local save_data = require 'common.save_data'
+local texts = require 'common.texts'
 require 'common.utils'
 
 local LAUNCH_TIME_KEY = 'launch_time'
@@ -47,6 +48,7 @@ function init(self)
 	end
 
 	save_data.initialize()
+	texts.initialize()
 	monarch.scr = screens
 	window.set_listener(resize)
 	timer.delay(0.1, false, function()
