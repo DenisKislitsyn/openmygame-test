@@ -6,6 +6,7 @@ local line_points = {}
 local v_length = vmath.length
 local line_in_drawing = nil
 local t_insert = table.insert
+local max = math.max
 
 local window_h, window_w = 1280, 720
 local screen_h, screen_w = 1280, 720
@@ -100,8 +101,8 @@ function Line:add(start_point_node)
 	local segment = {}
 	segment.start_point_node = start_point_node
 	segment.start_point = gui.screen_to_local(self.root, gui.get_screen_position(segment.start_point_node))
-	segment.start_point.x = segment.start_point.x * math.max(1, fit_w/window_w)
-	segment.start_point.y = segment.start_point.y * math.max(1, fit_h/window_h)
+	segment.start_point.x = segment.start_point.x * max(1, fit_w/window_w)
+	segment.start_point.y = segment.start_point.y * max(1, fit_h/window_h)
 	segment.length = 0
 	segment.dots = {}
 	segment.handle_start =  vmath.vector3()
@@ -125,8 +126,8 @@ end
 function Line:draw(action)
 	-- only last line
 	line_in_drawing = self.segments[#self.segments]
-	press_point.x = action.x * math.max(1, fit_w/window_w)
-	press_point.y = action.y * math.max(1, fit_h/window_h)
+	press_point.x = action.x * max(1, fit_w/window_w)
+	press_point.y = action.y * max(1, fit_h/window_h)
 
 	if #self.segments > 1 then
 		self.segments[#self.segments-1].handle_press = -(press_point - self.segments[#self.segments-1].start_point) / 5

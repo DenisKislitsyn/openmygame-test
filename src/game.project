@@ -25,7 +25,7 @@ wasm_streaming = 1
 
 [project]
 title = openmygame_test
-version = 0.0.3
+version = 1.0.0
 publisher = DKislicyn
 developer = DKislicyn
 custom_resources = res/
@@ -44,7 +44,7 @@ max_count = 0
 max_count = 3
 
 [factory]
-max_count = 16
+max_count = 0
 
 [gui]
 max_count = 8

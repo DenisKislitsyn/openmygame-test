@@ -11,6 +11,13 @@ local text_colors = {
 	[true] = vmath.vector3(1),
 	[false] = vmath.vector3(88/255,89/255,91/255)
 }
+local roots_scales = {
+	[true] = vmath.vector3(1.1),
+	[false] = vmath.vector3(1),
+}
+
+local SCALE = 'scale'
+
 
 function InputLetter.new(context, prefab, char)
 	local self = setmetatable({}, InputLetter)
@@ -35,6 +42,7 @@ end
 function InputLetter:set_state()
 	gui.play_flipbook(self.nodes.bg, bg_icons[self.picked])
 	gui.set_color(self.nodes.text, text_colors[self.picked])
+	gui.animate(self.nodes.root, SCALE, roots_scales[self.picked], gui.EASING_LINEAR, 0.2, 0)
 end
 
 function InputLetter:on_input(action)

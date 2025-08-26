@@ -1,17 +1,15 @@
 local game_utils = require 'screens.game.modules.game_utils'
 local save_data = require 'common.save_data'
 local texts = require 'common.texts'
+local monarch = require 'monarch.monarch'
 
 local m_input_letter = require 'screens.game.modules.input_letter'
 local m_cell = require 'screens.game.modules.cell'
 local m_word = require 'screens.game.modules.word'
 local m_line = require 'screens.game.modules.line'
 
-local monarch = require 'monarch.monarch'
-
 local POSITION_X = 'position.x'
 local POSITION_Y = 'position.y'
-local POSITION = 'position'
 local LEVEL_KEY = 'level'
 local LEVEL_DATA_KEY = 'level_data'
 local TOUCH = hash('touch')
@@ -162,16 +160,30 @@ local function check_word(self)
 		str = str .. c.char
 	end
 
+	local founded = false
 	for _, word_data in ipairs(self.words) do
 		if word_data.str == str and not word_data.found then
 			word_data.found = true
 			m_word.set_cells_state(word_data.obj, m_cell.states.CORRECT)
 			save_level_data(self)
+			founded = true
 			break
 		end
 	end
+
+	if not founded then
+		m_word.set_cells_state(self.input_queue_word, m_cell.states.INCORRECT)
+		gui.animate(self.input_queue_word.root, POSITION_X, -10, gui.EASING_INSINE, 0.12, 0, function ()
+			gui.animate(self.input_queue_word.root, POSITION_X, 10, gui.EASING_INSINE, 0.12, 0, function ()
+				gui.animate(self.input_queue_word.root, POSITION_X, 0, gui.EASING_OUTBACK, 0.06, 0, function ()
+					m_word.clear_cells(self.input_queue_word)
+				end)
+			end)
+		end)
+	else
+		m_word.clear_cells(self.input_queue_word)
+	end
 	
-	m_word.clear_cells(self.input_queue_word)
 
 	check_win(self)
 end

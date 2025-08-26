@@ -10,11 +10,13 @@ local cyrillic_upper = {
 	["ч"] = "Ч", ["ш"] = "Ш", ["щ"] = "Щ", ["ы"] = "Ы", ["э"] = "Э", ["ю"] = "Ю",
 	["я"] = "Я"
 }
+local t_insert = table.insert
+local max = math.max
 
 local function get_word_chars(word)
 	local chars = {}
 	for ch in word:gmatch(letter_utf) do
-		table.insert(chars, ch)
+		t_insert(chars, ch)
 	end
 
 	return chars
@@ -25,7 +27,7 @@ function M.get_words_by_level(level)
 	local words_list = json.decode(level_file).words
 	local data = {}
 	for i, word in ipairs(words_list) do
-		table.insert(data, {
+		t_insert(data, {
 			str = word,
 			list = get_word_chars(word),
 			index = i
@@ -45,14 +47,14 @@ function M.get_unique_chars(words)
 		end
 
 		for ch, count in pairs(word_chars) do
-			chars_by_count[ch] = chars_by_count[ch] and math.max(chars_by_count[ch], count) or count
+			chars_by_count[ch] = chars_by_count[ch] and max(chars_by_count[ch], count) or count
 		end
 	end
 
 	local chars_by_list = {}
 	for ch, count in pairs(chars_by_count) do
 		for i = 1, count do
-			table.insert(chars_by_list, ch)
+			t_insert(chars_by_list, ch)
 		end
 	end
 

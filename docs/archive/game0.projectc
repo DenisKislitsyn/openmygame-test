@@ -1,6 +1,6 @@
 [project]
 title = openmygame_test
-version = 0.0.3
+version = 1.0.0
 write_log = 0
 minimum_log_level = 1
 compress_archive = 1
@@ -124,7 +124,7 @@ max_count = 3
 max_count = 0
 
 [factory]
-max_count = 16
+max_count = 0
 
 [ios]
 launch_screen = /builtins/manifests/ios/LaunchScreen.storyboardc
